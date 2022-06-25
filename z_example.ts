@@ -1,4 +1,8 @@
 import t_node from "./t_node";
+import t_behavior_tree from "./t_behavior_tree";
+import t_sequence from "./t_sequence";
+import t_selector from "./t_selector";
+import t_random from "./t_random";
 ////////////////
 export class t_looking extends t_node {
 	enter(): void {
@@ -56,3 +60,24 @@ export class t_standing extends t_node {
 	}
 };
 
+(function test() {
+	var bt: t_behavior_tree = new t_behavior_tree(
+		new t_sequence([new t_selector([
+			new t_standing(0),
+			new t_looking(),
+		]),
+		new t_random
+			([
+				new t_running("SOUTH"),
+				new t_running("WEST"),
+				new t_running("EAST"),
+				new t_running("NORTH"),
+			]),
+		])
+	);
+
+	for (var tick = 0; tick < 10; ++tick) {
+		console.log("behaviour_tree_tick", tick);
+		bt.tick();
+	}
+})();
